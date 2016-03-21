@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
     int h = 0;
     int n = 0;
     int m = 0;
+    std::cout << "будь зайкой, напиши дважды колличество пикселей";
     std::cin >> w >> h;
     Bitmap bitmap = Bitmap(QString(argv[0]));
     m = (int) (bitmap.width/w);
@@ -95,12 +96,14 @@ int main(int argc, char *argv[])
     }
 
     Bitmap outputImage = Bitmap(m*w, n*h, newImage, bitmap.imageFormat);
-    for(int i = 0; i < newImageNames.size(); i++) {
-        newImageNames[i].scaled(w, h);
+    for(int i = 0; i < (int)newImageNames.size(); i++) {
+        QImage(newImageNames[i]).scaled(w,h);
+        Bitmap part = Bitmap(newImageNames[i]);
+        for(int k = 0; k < h; k++) {
+            for(int j = 0; j < w; j++) {
+                outputImage.setPixel(k + (i % m)*w, j + (((int) i / n) * h),part.getPixel(k,j));
+            }
+        }
     }
-
-
-
-
 }
 ///Users/annafrolova/Desktop/images/
