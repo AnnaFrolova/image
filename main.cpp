@@ -105,5 +105,6 @@ int main(int argc, char *argv[])
             }
         }
     }
+    return outputImage;
 }
 ///Users/annafrolova/Desktop/images/
