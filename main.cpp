@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <qpixmap.h>
 QString name[3] = {QString(".png"), QString(".jpg"), QString(".jpeg")};
 const int sizename = 3;
 std::vector<Pixel> pix;
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
     int h = 0;
     int n = 0;
     int m = 0;
-    std::cout << "будь зайкой, напиши дважды колличество пикселей";
+    std::cout << "будь зайкой, напиши дважды количество пикселей";
     std::cin >> w >> h;
     Bitmap bitmap = Bitmap(QString(argv[0]));
     m = (int) (bitmap.width/w);
@@ -105,6 +106,10 @@ int main(int argc, char *argv[])
             }
         }
     }
-    return outputImage;
+    QPixmap pixmap;
+    pixmap = outputImage.toPixmap();
+    QString ourName = QString("ourImage");
+    pixmap.save(ourName);
+
 }
 ///Users/annafrolova/Desktop/images/
