@@ -14,13 +14,16 @@ std::vector<QString> newImageNames;
 std::vector<Pixel> newImage;
 int main(int argc, char *argv[])
 {
-//    Bitmap bitmap = Bitmap(QString(argv[0]));
+    QCoreApplication a(argc, argv);
     std::cout << std::endl;
-    for(int i = 1; i < argc; i++) {
-        std::cout << i << " " << argv[i] << std::endl;
-  }
-    QDirIterator it(argv[2]);
 
+
+    QString filename = QString("/Users/annafrolova/Desktop/pic.jpeg");
+    QString pathToImages = QString("/Users/annafrolova/Desktop/images/");
+    QString pathToOutput = QString("/Users/annafrolova/Desktop/output.jpeg");
+
+    QDirIterator it(pathToImages);
+    //считаем среднее значение для каждой картинки
     while(it.hasNext()) {
        QString lastname = it.next();
 
@@ -53,19 +56,20 @@ int main(int argc, char *argv[])
            blue /= bitmap.pixels.size();
            pix.push_back(Pixel(red, green, blue));
            nameFiles.push_back(lastname);
-           //std::cout << red << " " << green << " " << blue << " " << std::endl;
         }
     }
-    int w = 0;
-    int h = 0;
-    int n = 0;
-    int m = 0;
-    std::cout << "будь зайкой, напиши дважды количество пикселей";
+    int w = 0; //длина маленьких картинок в коллаже в pix
+    int h = 0; //ширина маленьких картинок в коллаже в pix
+    int n = 0; //количество маленьких картинок в коллаже по длине
+    int m = 0; //количество маленьких картинок в коллаже по ширине
+    std::cout << filename.toStdString() << std::endl;
+    std::cout << "будь зайкой, напиши дважды количество пикселей" << std::endl;
     std::cin >> w >> h;
-    Bitmap bitmap = Bitmap(QString(argv[0]));
+    Bitmap bitmap = Bitmap(filename);
     m = (int) (bitmap.width/w);
     n = (int) (bitmap.height/h);
 
+    //подбираем изображения для коллажа
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
             long long red = 0;
@@ -95,21 +99,42 @@ int main(int argc, char *argv[])
             newImageNames.push_back(ourname);
         }
     }
-
+    //создаем коллаж
     Bitmap outputImage = Bitmap(m*w, n*h, newImage, bitmap.imageFormat);
     for(int i = 0; i < (int)newImageNames.size(); i++) {
-        QImage(newImageNames[i]).scaled(w,h);
+        //QImage(newImageNames[i]).scaled(w,h);
         Bitmap part = Bitmap(newImageNames[i]);
         for(int k = 0; k < h; k++) {
             for(int j = 0; j < w; j++) {
-                outputImage.setPixel(k + (i % m)*w, j + (((int) i / n) * h),part.getPixel(k,j));
+                long long red = 0;
+                long long green = 0;
+                long long blue = 0;
+                int wi = part.width/m;
+                int he = part.height/n;
+
+                for(int a = 0; a < he; a++) {
+                    for(int b = 0; b < wi; b++) {
+                        Pixel current = part.getPixel(j*wi + b, k*he + a);
+                        red += current.red;
+                        green += current.green;
+                        blue += current.blue;
+                    }
+                }
+                red /= wi*he;
+                green /= wi*he;
+                blue /= wi*he;
+                Pixel smallPix = Pixel(red,green,blue);
+                int xmap = j + (int) (i % m) * w;
+                int ymap = k + (int) (i / n) * h;
+                outputImage.setPixel(xmap, ymap, smallPix);
             }
         }
     }
     QPixmap pixmap;
     pixmap = outputImage.toPixmap();
-    QString ourName = QString("ourImage");
-    pixmap.save(ourName);
+    QFile file(pathToOutput);
+    file.open(QIODevice::WriteOnly);
+    pixmap.save(&file, "JPG");
 
 }
 ///Users/annafrolova/Desktop/images/
