@@ -22,17 +22,19 @@ public:
 
     Bitmap();
     // загрузка изображения по имени файла.
-    Bitmap(QString filename);
+    Bitmap(QString filename, double scaleValue=1);
     // конструктор копирования
     Bitmap(Bitmap const & other);
     Bitmap(size_t width, size_t height, std::vector<Pixel> pixels, QImage::Format format);
 
     // Декодирование к формуту, используемому QT для показа изображений на экране.
-    const QPixmap toPixmap();
+    QImage toImage();
 
     // Т.к точки лежат в однгомерном массиве, нужны функции для доступа к точкам по координатам.
     Pixel getPixel(int x, int y);
     void setPixel(int x, int y, Pixel pixel);
+    //Среднее значение пикселей изображения
+    Pixel averagePixel();
 };
 
 

@@ -3,7 +3,8 @@
 #include <QRgb>
 #include <QPixmap>
 #include <vector>
-
+#include "pixel.h"
+#include <QDebug>
 #include <iostream>
 
 Bitmap::Bitmap()
@@ -13,12 +14,15 @@ Bitmap::Bitmap()
 
 // Загрузка изображения из файла.
 
-Bitmap::Bitmap(QString filename)
+Bitmap::Bitmap(QString filename, double scaleValue)
 {
     this->pixels.clear();
     QImage image;
     // Загрузка изображения в QImage. Избавляет от кучи проблем с декодированием.
     image.load(filename);
+    if(scaleValue != 1) {
+        image = image.scaled(image.width() * scaleValue, image.height() * scaleValue, Qt::KeepAspectRatio);
+    }
     // Сохраняем формат изображения. Понадобится при сохранении.
     this->imageFormat = image.format();
     for(int x = 0; x < image.width(); ++x) {
@@ -53,7 +57,7 @@ Bitmap::Bitmap(size_t width, size_t height, std::vector<Pixel> pixels, QImage::F
 
 // Экспорт в QPixmap --- формат, используемый QT для вывода изображений на экран, сохранения.
 
-const QPixmap Bitmap::toPixmap()
+QImage Bitmap::toImage()
 {
     QImage image = QImage(this->width, this->height, this->imageFormat);
     // Изображение должно быть проинициализировано хоть чем-то перед тем как с ним работать.
@@ -65,8 +69,7 @@ const QPixmap Bitmap::toPixmap()
             image.setPixel(x, y, qRgba(pixel.red, pixel.green, pixel.blue, 1));
         }
     }
-    const QPixmap pixmap = QPixmap::fromImage(image);
-    return pixmap;
+    return image;
 }
 
 // Доступ к точке по ее координатам.
@@ -83,6 +86,26 @@ void Bitmap::setPixel(int x, int y, Pixel pixel)
     int position = x * this->height + y;
     pixel.validate();
     this->pixels[position] = pixel;
+}
+//Среднее значение пикселей изображения
+Pixel Bitmap::averagePixel()
+{
+    long long totalRed = 0, totalGreen = 0, totalBlue = 0;
+
+    for(auto selectedPixel = this->pixels.begin(); selectedPixel != this->pixels.end(); ++selectedPixel) {
+        totalRed += selectedPixel->red;
+        totalGreen += selectedPixel->green;
+        totalBlue += selectedPixel->blue;
+    }
+
+    totalRed /= this->pixels.size();
+    totalGreen /= this->pixels.size();
+    totalBlue /= this->pixels.size();
+
+    Pixel average = Pixel(totalRed, totalGreen, totalBlue);
+    // Вызываем validate, но все должно быть ок и без него.
+    average.validate();
+    return average;
 }
 
 
