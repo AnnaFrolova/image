@@ -33,7 +33,7 @@ void ImageMaker::generatePixels()
     }
     assert(this->averagePixels.size() == this->imagePaths.size());
 }
-//Подбираем маленькое изображения для коллажа
+//Подбирает наиболее подходящее изображение для замены пиксела
 QString ImageMaker::getNearestImage(Pixel pixel)
 {
     Pixel smallest = this->averagePixels.front();
@@ -50,7 +50,7 @@ QString ImageMaker::getNearestImage(Pixel pixel)
     }
     return smallestPath;
 }
-//Создание нового изображения
+//Собирает изображение из предподсчитынных маленьких
 Bitmap ImageMaker::constructImage(std::vector<QString> replacingImages, int wCount, int hCount, QImage::Format imageFormat)
 {
     assert(replacingImages.size() == wCount * hCount);
@@ -84,13 +84,13 @@ Bitmap ImageMaker::constructImage(std::vector<QString> replacingImages, int wCou
 
     return resultBitmap;
 }
-//Конструктор
+//Конструктор создает объект ImageMaker, где imagePaths - пути к изображениям
 ImageMaker::ImageMaker(std::vector<QString> imagePaths)
 {
     this->imagePaths = imagePaths;
     this->generatePixels();
 }
-//Конструктор
+//Путь к папке с изображениями (все изображения должны быть одинакового размера)
 ImageMaker::ImageMaker(QString imageFolderPath)
 {
     QDirIterator directoryIterator(imageFolderPath);
@@ -102,7 +102,7 @@ ImageMaker::ImageMaker(QString imageFolderPath)
     }
     this->generatePixels();
 }
-//Данные для нового изображения
+//Создает коллаж из маленьких изображений, fromPath - путь к файлу изображения, который хотим создать, scaleValue - коэффициент, на который будут помножены линейные размеры изображения
 Bitmap ImageMaker::makeImage(QString fromPath, double scaleValue)
 {
     Bitmap bitmap(fromPath, scaleValue);

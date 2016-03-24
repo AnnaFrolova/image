@@ -11,24 +11,27 @@ class ImageMaker
 private:
     //Контур изображения
     std::vector<QString> imagePaths;
+    //Среднее значение пикселей изображения
     std::vector<Pixel> averagePixels;
+    //Хорошие расширения изображения
     std::vector<QString> goodExtension = {QString(".png"), QString(".jpg"), QString(".jpeg")};
+    //Размер маленьких изображений в коллаже
     size_t smallImageH;
     size_t smallImageW;
-    //Проверка расширения картинки
+    //Проверка расширения изображения
     bool checkFileExtenson(QString filename);
     //Контур изображения
     void generatePixels();
-    //Подбираем маленькое изображения для коллажа
+    //Подбирает наиболее подходящее изображение для замены пиксела
     QString getNearestImage(Pixel pixel);
-    //Создание нового изображения
+    //Собирает изображение из предподсчитынных маленьких
     Bitmap constructImage(std::vector<QString> replacingImages, int wCount, int hCount, QImage::Format imageFormat);
 public:
-
+    //Конструктор создает объект ImageMaker, где imagePaths - пути к изображениям
     ImageMaker(std::vector<QString> imagePaths);
-
+    //Путь к папке с изображениями (все изображения должны быть одинакового размера)
     ImageMaker(QString imageFolderPath);
-    //Данные для нового изображения
+    //Создает коллаж из маленьких изображений, fromPath - путь к файлу изображения, который хотим создать, scaleValue - коэффициент, на который будут помножены линейные размеры изображения
     Bitmap makeImage(QString fromPath, double scaleValue);
 };
 

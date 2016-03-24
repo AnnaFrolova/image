@@ -12,9 +12,14 @@
 
 int main(int argc, char *argv[])
 {
+
     QCoreApplication a(argc, argv);
-    QString pathToImages = QString(argv[1]);
-    QString inputPath = QString(argv[2]);
+    if(argc != 3) {
+        std::cout << "Argument error";
+        return -1;
+    }
+    QString pathToImages = QString(argv[2]);
+    QString inputPath = QString(argv[1]);
     QString outputPath = QString(argv[3]);
 
     ImageMaker maker(pathToImages);
