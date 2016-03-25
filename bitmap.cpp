@@ -20,13 +20,16 @@ Bitmap::Bitmap(QString filename, double scaleValue)
     QImage image;
     // Загрузка изображения в QImage. Избавляет от кучи проблем с декодированием.
     image.load(filename);
-    if(scaleValue != 1) {
+    if(scaleValue != 1)
+    {
         image = image.scaled(image.width() * scaleValue, image.height() * scaleValue, Qt::KeepAspectRatio);
     }
     // Сохраняем формат изображения. Понадобится при сохранении.
     this->imageFormat = image.format();
-    for(int x = 0; x < image.width(); ++x) {
-        for(int y = 0; y < image.height(); ++y) {
+    for(int x = 0; x < image.width(); ++x)
+    {
+        for(int y = 0; y < image.height(); ++y)
+        {
             QRgb value = image.pixel(x, y);
             int red = qRed(value);
             int green = qGreen(value);
@@ -63,8 +66,10 @@ QImage Bitmap::toImage()
     // Изображение должно быть проинициализировано хоть чем-то перед тем как с ним работать.
     image.fill(Qt::gray);
     // Перебор всех точек, затем установка значений в image.
-    for(size_t x = 0; x < this->width; ++x) {
-        for(size_t y = 0; y < this->height; ++y) {
+    for(size_t x = 0; x < this->width; ++x)
+    {
+        for(size_t y = 0; y < this->height; ++y)
+        {
             Pixel pixel = this->getPixel(x, y);
             image.setPixel(x, y, qRgba(pixel.red, pixel.green, pixel.blue, 1));
         }
@@ -92,7 +97,8 @@ Pixel Bitmap::averagePixel()
 {
     long long totalRed = 0, totalGreen = 0, totalBlue = 0;
 
-    for(auto selectedPixel = this->pixels.begin(); selectedPixel != this->pixels.end(); ++selectedPixel) {
+    for(auto selectedPixel = this->pixels.begin(); selectedPixel != this->pixels.end(); ++selectedPixel)
+    {
         totalRed += selectedPixel->red;
         totalGreen += selectedPixel->green;
         totalBlue += selectedPixel->blue;

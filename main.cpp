@@ -9,7 +9,8 @@
 #include <imagemaker.h>
 #include <QDebug>
 #include <QImage>
-int toInt(char *str) {
+int toInt(char *str)
+{
     std::string s(str);
     std::string::size_type sz;
     return std::stoi(s, &sz);
@@ -19,7 +20,8 @@ int main(int argc, char *argv[])
 {
 
     QCoreApplication a(argc, argv);
-    if(argc != 5) {
+    if(argc != 5)
+    {
         std::cout << "Argument error";
         return -1;
     }

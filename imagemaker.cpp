@@ -10,8 +10,10 @@
 //Проверка расширения картинки
 bool ImageMaker::checkFileExtenson(QString filename)
 {
-    for(auto extension = this->goodExtension.begin(); extension != this->goodExtension.end(); ++extension) {
-        if(filename.endsWith(*extension)) {
+    for(auto extension = this->goodExtension.begin(); extension != this->goodExtension.end(); ++extension)
+    {
+        if(filename.endsWith(*extension))
+        {
             return true;
         }
     }
@@ -20,10 +22,12 @@ bool ImageMaker::checkFileExtenson(QString filename)
 //Контур изображения
 void ImageMaker::generatePixels()
 {
-    for(auto filePath = imagePaths.begin(); filePath != imagePaths.end(); ++filePath) {
+    for(auto filePath = imagePaths.begin(); filePath != imagePaths.end(); ++filePath)
+    {
         Bitmap bitmap = Bitmap(*filePath);
 
-        if (this->averagePixels.size() != 0) {
+        if (this->averagePixels.size() != 0)
+        {
             assert(this->smallImageH == bitmap.height && this->smallImageW == bitmap.width);
         }
         this->smallImageH = bitmap.height;
@@ -39,11 +43,13 @@ QString ImageMaker::getNearestImage(Pixel pixel)
     Pixel smallest = this->averagePixels.front();
     QString smallestPath = this->imagePaths.front();
 
-    for(size_t imageIndex = 0; imageIndex < this->averagePixels.size(); ++imageIndex) {
+    for(size_t imageIndex = 0; imageIndex < this->averagePixels.size(); ++imageIndex)
+    {
         Pixel currentPixel = this->averagePixels[imageIndex];
         double smallestDistance = fabs(smallest.red - pixel.red) + fabs(smallest.green - pixel.green) + fabs(smallest.blue - pixel.blue);
         double currentDistance = fabs(currentPixel.red - pixel.red) + fabs(currentPixel.green - pixel.green) + fabs(currentPixel.blue - pixel.blue);
-        if (currentDistance < smallestDistance) {
+        if (currentDistance < smallestDistance)
+        {
             smallest = currentPixel;
             smallestPath = this->imagePaths[imageIndex];
         }
@@ -60,15 +66,19 @@ Bitmap ImageMaker::constructImage(std::vector<QString> replacingImages, size_t w
 
     Bitmap resultBitmap = Bitmap(newBitmapW, newBitmapH, pixels, imageFormat);
 
-    for(size_t imageIndexH = 0; imageIndexH < hCount; ++imageIndexH) {
-        for(size_t imageIndexW = 0; imageIndexW < wCount; ++imageIndexW) {
+    for(size_t imageIndexH = 0; imageIndexH < hCount; ++imageIndexH)
+    {
+        for(size_t imageIndexW = 0; imageIndexW < wCount; ++imageIndexW)
+        {
             int selectedIndex = imageIndexH * wCount + imageIndexW;
             // каждый раз загружать с диска - долго, можно оптимизировать
             Bitmap image = Bitmap(replacingImages[selectedIndex]);
             int startH = image.height * imageIndexH;
             int startW = image.width * imageIndexW;
-            for(size_t dH = 0; dH < image.height; ++dH) {
-                for(size_t dW = 0; dW < image.width; ++dW) {
+            for(size_t dH = 0; dH < image.height; ++dH)
+            {
+                for(size_t dW = 0; dW < image.width; ++dW)
+                {
                     size_t posH = startH + dH;
                     size_t posW = startW + dW;
                     assert(posH < resultBitmap.height);
@@ -94,9 +104,11 @@ ImageMaker::ImageMaker(std::vector<QString> imagePaths)
 ImageMaker::ImageMaker(QString imageFolderPath)
 {
     QDirIterator directoryIterator(imageFolderPath);
-    while(directoryIterator.hasNext()) {
+    while(directoryIterator.hasNext())
+    {
         QString currentFileName = directoryIterator.next();
-        if(this->checkFileExtenson(currentFileName)) {
+        if(this->checkFileExtenson(currentFileName))
+        {
             this->imagePaths.push_back(currentFileName);
         }
     }
@@ -112,8 +124,10 @@ Bitmap ImageMaker::makeImage(QString fromPath, double scaleValue)
 
     std::vector<QString> replacingImages;
 
-    for(int hIndex = 0; hIndex < hCount; ++hIndex) {
-        for(int wIndex = 0; wIndex < wCount; ++wIndex) {
+    for(int hIndex = 0; hIndex < hCount; ++hIndex)
+    {
+        for(int wIndex = 0; wIndex < wCount; ++wIndex)
+        {
             // Начальные координаты отрезка.
             int h = hIndex * this->smallImageH;
             int w = wIndex * this->smallImageW;
@@ -121,8 +135,10 @@ Bitmap ImageMaker::makeImage(QString fromPath, double scaleValue)
             long long red = 0;
             long long green = 0;
             long long blue = 0;
-            for(size_t subImageH = 0; subImageH < this->smallImageH; ++subImageH) {
-                for(size_t subImageW = 0; subImageW < this->smallImageW; ++subImageW) {
+            for(size_t subImageH = 0; subImageH < this->smallImageH; ++subImageH)
+            {
+                for(size_t subImageW = 0; subImageW < this->smallImageW; ++subImageW)
+                {
                     int newH = h + subImageH;
                     int newW = w + subImageW;
 
