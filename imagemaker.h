@@ -25,7 +25,7 @@ private:
     //Подбирает наиболее подходящее изображение для замены пиксела
     QString getNearestImage(Pixel pixel);
     //Собирает изображение из предподсчитынных маленьких
-    Bitmap constructImage(std::vector<QString> replacingImages, int wCount, int hCount, QImage::Format imageFormat);
+    Bitmap constructImage(std::vector<QString> replacingImages, size_t wCount, size_t hCount, QImage::Format imageFormat);
 public:
     //Конструктор создает объект ImageMaker, где imagePaths - пути к изображениям
     ImageMaker(std::vector<QString> imagePaths);

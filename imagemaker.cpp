@@ -33,13 +33,13 @@ void ImageMaker::generatePixels()
     }
     assert(this->averagePixels.size() == this->imagePaths.size());
 }
-//Подбирает наиболее подходящее изображение для замены пиксела
+//Считаем средние пиксели для каждого изображения и подбираем маленькое изображения для коллажа
 QString ImageMaker::getNearestImage(Pixel pixel)
 {
     Pixel smallest = this->averagePixels.front();
     QString smallestPath = this->imagePaths.front();
 
-    for(int imageIndex = 0; imageIndex < this->averagePixels.size(); ++imageIndex) {
+    for(size_t imageIndex = 0; imageIndex < this->averagePixels.size(); ++imageIndex) {
         Pixel currentPixel = this->averagePixels[imageIndex];
         double smallestDistance = fabs(smallest.red - pixel.red) + fabs(smallest.green - pixel.green) + fabs(smallest.blue - pixel.blue);
         double currentDistance = fabs(currentPixel.red - pixel.red) + fabs(currentPixel.green - pixel.green) + fabs(currentPixel.blue - pixel.blue);
@@ -51,7 +51,7 @@ QString ImageMaker::getNearestImage(Pixel pixel)
     return smallestPath;
 }
 //Собирает изображение из предподсчитынных маленьких
-Bitmap ImageMaker::constructImage(std::vector<QString> replacingImages, int wCount, int hCount, QImage::Format imageFormat)
+Bitmap ImageMaker::constructImage(std::vector<QString> replacingImages, size_t wCount, size_t hCount, QImage::Format imageFormat)
 {
     assert(replacingImages.size() == wCount * hCount);
     int newBitmapH = this->smallImageH * (hCount);
@@ -60,17 +60,17 @@ Bitmap ImageMaker::constructImage(std::vector<QString> replacingImages, int wCou
 
     Bitmap resultBitmap = Bitmap(newBitmapW, newBitmapH, pixels, imageFormat);
 
-    for(int imageIndexH = 0; imageIndexH < hCount; ++imageIndexH) {
-        for(int imageIndexW = 0; imageIndexW < wCount; ++imageIndexW) {
+    for(size_t imageIndexH = 0; imageIndexH < hCount; ++imageIndexH) {
+        for(size_t imageIndexW = 0; imageIndexW < wCount; ++imageIndexW) {
             int selectedIndex = imageIndexH * wCount + imageIndexW;
             // каждый раз загружать с диска - долго, можно оптимизировать
             Bitmap image = Bitmap(replacingImages[selectedIndex]);
             int startH = image.height * imageIndexH;
             int startW = image.width * imageIndexW;
-            for(int dH = 0; dH < image.height; ++dH) {
-                for(int dW = 0; dW < image.width; ++dW) {
-                    int posH = startH + dH;
-                    int posW = startW + dW;
+            for(size_t dH = 0; dH < image.height; ++dH) {
+                for(size_t dW = 0; dW < image.width; ++dW) {
+                    size_t posH = startH + dH;
+                    size_t posW = startW + dW;
                     assert(posH < resultBitmap.height);
                     assert(posW < resultBitmap.width);
 

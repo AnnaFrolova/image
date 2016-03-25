@@ -27,105 +27,10 @@ public:
     double green;
     double blue;
 
-    Pixel& operator += (Pixel const& other)
-    {
-        this->red += other.red;
-        this->green += other.green;
-        this->blue += other.blue;
-        return *this;
-    }
-    Pixel& operator -= (Pixel const& other)
-    {
-        this->red -= other.red;
-        this->green -= other.green;
-        this->blue -= other.blue;
-        return *this;
-    }
-
-    Pixel& operator *= (Pixel const& other)
-    {
-        this->red *= other.red;
-        this->green *= other.green;
-        this->blue *= other.blue;
-        return *this;
-    }
-    Pixel& operator /= (Pixel const& other)
-    {
-        this->red /= other.red;
-        this->green /= other.green;
-        this->blue /= other.blue;
-        return *this;
-    }
-
-    Pixel& operator += (double rhs)
-    {
-        Pixel newPixel = Pixel(rhs, rhs, rhs);
-        *this += newPixel;
-        return *this;
-    }
-
-    Pixel& operator -= (double rhs)
-    {
-        Pixel newPixel = Pixel(rhs, rhs, rhs);
-        *this -= newPixel;
-        return *this;
-    }
-    Pixel& operator *= (double rhs)
-    {
-        Pixel newPixel = Pixel(rhs, rhs, rhs);
-        *this *= newPixel;
-        return *this;
-    }
-    Pixel& operator /= (double rhs)
-    {
-        Pixel newPixel = Pixel(rhs, rhs, rhs);
-        *this /= newPixel;
-        return *this;
-    }
-
     friend bool operator == (Pixel const& a, Pixel const& b)
     {
         return a.red == b.red && a.green == b.green && a.blue == b.blue;
     }
-    friend bool operator != (Pixel const& a, Pixel const& b)
-    {
-        return !(a == b);
-    }
 };
-
-inline Pixel operator + (Pixel a, Pixel const& b)
-{
-    Pixel pixel = a;
-    return pixel += b;
-}
-inline Pixel operator - (Pixel a, Pixel const& b)
-{
-    Pixel pixel = a;
-    return pixel -= b;
-}
-
-inline Pixel operator + (Pixel a, double b)
-{
-    Pixel pixel = a;
-    return pixel += b;
-}
-inline Pixel operator - (Pixel a, double b)
-{
-    Pixel pixel = a;
-    return pixel -= b;
-}
-inline Pixel operator * (Pixel a, double b)
-{
-    Pixel pixel = a;
-    return pixel *= b;
-}
-inline Pixel operator / (Pixel a, double b)
-{
-    Pixel pixel = a;
-    return pixel /= b;
-}
-
-bool operator == (Pixel const& a, Pixel const& b);
-bool operator != (Pixel const& a, Pixel const& b);
 
 #endif // PIXEL_H
